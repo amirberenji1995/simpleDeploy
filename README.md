@@ -7,8 +7,30 @@ Intelligent methods are developed to be used and Jupyter/Colab notebooks are far
 
 ## 2. Data
 
+Data is the critical ingridient of every data-driven solution. I use the  Case Western Reverse University [bearing dataset](https://engineering.case.edu/bearingdatacenter); this dataset includes signals from both drive-end and fan-end bearings but we focus on the drive-end signals in this implementation. Similar to other benchmark datasets, the raw data is presented as super long signals (e.g. 122281-points long). Hence, the starting point is to divide these raw signals into 2048-points signals with a hop-lenght of 2048. Metadata (load, health state and fault severity) are also extracted in this stage. To achieve smoother convergence, time series need to be scaled; to do so, every signal is subtracted from its mean and divided by its standard deviation, as illustrated in the following equation:
 
+$\widetilde{x} = \frac{x - \mu}{\sigma}$
+
+where $\widetilde{x}$ is the scaled time serie, $x$ is the raw time serie, $\mu$ is the mean of the $x$ and $\sigma$ is its standard deviation. In the [scaler.py]() file, the implementation of the scaling operation can be found.
+
+Next, is to split the dataset into train and test subsets, using a 70:30 ratio. It worth mentioning that as the scaling transorm in this implementation is instance-specific, it is safe to first scale the dataset and then split into train/test subsets.
 
 ## 3. Model
+
+The problem we aim to solve is an example of time series classification and Convolutional Neural Networks (CNNs) are one of the favorite model types to engage such problem. I use a one-dimensional CNN consisting of a wide kernel convolutional layer, followed by an average pooling layer and a linear layer, as illustrated in the following figure.
+
+![model architecture](/assets/architecture.jpg)
+
+Although this model looks too simple at the first glance, it achieves 100% accuracy over the hold-out test set. You can see the training curves and the confusion matrix at the following figures.
+
+<img src="assets/training_curves.jpg" height="250" width = 790/>
+
+<img src="assets/confusion_matrix.jpg" height="250" width = 270/>
+
+For details on how the training is done, you can check the [training notebook]().
+
 ## 4. API
+
+
+
 ## 5. Deployment
