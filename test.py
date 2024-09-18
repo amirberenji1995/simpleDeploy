@@ -2,12 +2,12 @@ import requests as rq
 import pandas as pd
 import time
 
-url = 'http://127.0.0.1:8000/batch_predict/'
+url = 'https://simpledeploy-erxy.onrender.com/batch_predict/'
 header = {"Content-Type": "application/json; charset=utf-8"}
 
 df = pd.read_csv('assets/' + 'subsampled_test_df_lightCNN_timeClassifier.csv', index_col = 0)
 
-number = 50 # change number to the desired sample space
+number = 1 # change number to the desired sample space
 sub_df = df.sample(number)
 data = []
 for index, row in sub_df.iterrows():
@@ -15,7 +15,7 @@ for index, row in sub_df.iterrows():
 
 st = time.time()
 
-collected_data = rq.post(url = url, headers = header, json = data).json()
+collected_data = rq.post(url = url, headers = header, json = data, ).json()
 
 et = time.time()
 
