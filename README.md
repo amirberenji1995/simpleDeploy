@@ -11,7 +11,7 @@ Data is the critical ingridient of every data-driven solution. I use the  Case W
 
 $\widetilde{x} = \frac{x - \mu}{\sigma}$
 
-where $\widetilde{x}$ is the scaled time serie, $x$ is the raw time serie, $\mu$ is the mean of the $x$ and $\sigma$ is its standard deviation. In the [scaler.py]() file, the implementation of the scaling operation can be found.
+where $\widetilde{x}$ is the scaled time serie, $x$ is the raw time serie, $\mu$ is the mean of the $x$ and $\sigma$ is its standard deviation. In the [scaler.py](https://github.com/amirberenji1995/simpleDeploy/blob/main/utils/scaler.py) file, the implementation of the scaling operation can be found.
 
 Next, is to split the dataset into train and test subsets, using a 70:30 ratio. It worth mentioning that as the scaling transorm in this implementation is instance-specific, it is safe to first scale the dataset and then split into train/test subsets.
 
@@ -27,13 +27,13 @@ Although this model looks too simple at the first glance, it achieves 100% accur
 
 <img src="assets/confusion_matrix.jpg" height="250" width = 270/>
 
-For details on how the training is done, you can check the [training notebook]().
+For details on how the training is done, you can check the [training notebook](https://github.com/amirberenji1995/simpleDeploy/blob/main/training_notebook.ipynb).
 
 ## 4. API
 
 Application Programming Interfaces (APIs for short) enable seamless communication between different software applications. They serve as bridges, allowing developers to access and integrate functionalities from other services, thereby enhancing the capabilities of their own applications. In this implementation, I aim to serve the model as an individual API developed by [FastAPI](https://fastapi.tiangolo.com/); a minimalistic API development Python package. Using FastAPI, enables you to develop lightweight web services, quickly. Moreover, its minimalistic nature aligns with the [microservices](https://www.youtube.com/watch?v=CdBtNQZH8a4&list=PLOspHqNVtKAC-_ZAGresP-i0okHe5FjcJ&index=8&pp=iAQB) architecture, perfectly.
 
-As the name implies, API development using FastAPI is fast and easy; in fact, using only 41 lines of code available at [api.py](), we are able to develop an [RESTful](https://www.youtube.com/watch?v=lsMQRaeKNDk&list=PLOspHqNVtKAC-_ZAGresP-i0okHe5FjcJ&index=29&pp=iAQB) API to serve our model. Let's discuss the code in detail; once the essential imports are done, I first check if a GPU is available, using the snippet below:
+As the name implies, API development using FastAPI is fast and easy; in fact, using only 41 lines of code available at [api.py](https://github.com/amirberenji1995/simpleDeploy/blob/main/api.py), we are able to develop an [RESTful](https://www.youtube.com/watch?v=lsMQRaeKNDk&list=PLOspHqNVtKAC-_ZAGresP-i0okHe5FjcJ&index=29&pp=iAQB) API to serve our model. Let's discuss the code in detail; once the essential imports are done, I first check if a GPU is available, using the snippet below:
 
 ```python
 if torch.cuda.is_available():
@@ -53,7 +53,7 @@ model.load_state_dict(torch.load(importing_path + 'lightCNN_timeClassifier_Pytor
 model.eval()
 ```
 
-During the training of the model, we have encoded health states of the bearing to integers(0 for ball problem, 1 for inner race fault, 2 for normal bearings and 3 for outer race fault); to decode the model predictions, I stored this encoding as json file in [decoder.json](). To load this, we use the code snippet below:
+During the training of the model, we have encoded health states of the bearing to integers(0 for ball problem, 1 for inner race fault, 2 for normal bearings and 3 for outer race fault); to decode the model predictions, I stored this encoding as json file in [decoder.json](https://github.com/amirberenji1995/simpleDeploy/blob/main/assets/decoder.json). To load this, we use the code snippet below:
 
 
 ```python
@@ -86,7 +86,7 @@ def batch_predict(items: list[Item]):
 
     return {"Analysis": analysis, "Execution Time": 1000 * (et - st)}
 ```
-Simplest command to fire up the FastAPI application is to type ```fastapi dev api.py```. Once it is up and running, it can be accessed using the serving address (default is http://127.0.0.1:8000/); don't forget to add the 'batch_predict/' at the end of the serving address. In [test.py](), a simple code snippet is prepared to call the API using samples belonging to the hold-out test set and check its performance. Moreover, using to the experiment routine available at [API_performance_test.py](), means (over 10 iterations) of execution time (merely the inference time at server) and the delivery time (full process time of an API call) for different sample lenghts are summarized in table below:
+Simplest command to fire up the FastAPI application is to type ```fastapi dev api.py```. Once it is up and running, it can be accessed using the serving address (default is http://127.0.0.1:8000/); don't forget to add the 'batch_predict/' at the end of the serving address. In [test.py](https://github.com/amirberenji1995/simpleDeploy/blob/main/api_performance_test.py), a simple code snippet is prepared to call the API using samples belonging to the hold-out test set and check its performance. Moreover, using to the experiment routine available at [api_performance_test.py](), means (over 10 iterations) of execution time (merely the inference time at server) and the delivery time (full process time of an API call) for different sample lenghts are summarized in table below:
 
 | Lenght of records | Mean of Execution Time (mSec) | Mean of Delivery Time (mSec) |
 |:-----------------:|:-----------------------------:|:----------------------------:|
