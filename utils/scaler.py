@@ -1,15 +1,3 @@
-# import numpy as np
-
-# def scaler(arr):
-    
-#   array_mu = np.mean(arr, axis = 1)
-#   array_sig = np.std(arr, axis = 1)
-
-#   array_scaled = (np.subtract(arr.transpose(), array_mu) / array_sig).transpose()
-
-#   return array_scaled
-
-
 import torch
 
 def scaler(arr):
